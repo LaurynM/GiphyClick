@@ -4,22 +4,22 @@
 <head>
   <meta charset="utf-8">
   <title>Rainbow Dance Party!</title>
-    <style type="text/css">
-    body {
-      color: #DCDCDC;
-      background-color: black;
-      text-align: center;
-    }
-    button {
-      margin: 10px;
-    }
-    .color {
-      margin: 10px;
-      padding: 10px;
-      float: left;
-      border: solid 2px white;
-    }
-  </style>
+  <style type="text/css">
+  body {
+    color: #DCDCDC;
+    background-color: black;
+    text-align: center;
+  }
+  button {
+    margin: 10px;
+  }
+  .color {
+    margin: 10px;
+    padding: 10px;
+    float: left;
+    border: solid 2px white;
+  }
+</style>
 </head>
 
 <body>
@@ -46,66 +46,65 @@
     });
 
     //$("button").on("click", function() {
-    $(document).on('click', 'button', function() {
+      $(document).on('click', 'button', function() {
       $("#gifs").empty(); //remove previous gifs
       var color = $(this).data("color");
       var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + color + "&api_key=dc6zaTOxFJmzC&limit=10"; //used API key from examples
 
       $.ajax({
-          url: queryURL,
-          method: "GET"
-        })
-        .done(function(response) {
-          var results = response.data;
+        url: queryURL,
+        method: "GET"
+      })
+      .done(function(response) {
+        var results = response.data;
 
-          for (var i = 0; i < results.length; i++) {
-            var gifDiv = $("<div class='color'>");
-            var rating = results[i].rating;
-            var p = $("<p>").text("Rating: " + rating);
+        for (var i = 0; i < results.length; i++) {
+          var gifDiv = $("<div class='color'>");
+          var rating = results[i].rating;
+          var p = $("<p>").text("Rating: " + rating);
 
-            var colorImg = $("<img class='gif'>");
-            var stillURL = results[i].images.fixed_height_still.url;
-            var animatedURL = results[i].images.fixed_height.url;
+          var colorImg = $("<img class='gif'>");
+          var stillURL = results[i].images.fixed_height_still.url;
+          var animatedURL = results[i].images.fixed_height.url;
 
-            colorImg.attr("data-still", stillURL);
-            colorImg.attr("data-animated", animatedURL);
-            colorImg.attr("data-state", "still");
-            colorImg.attr("src", stillURL);
+          colorImg.attr("data-still", stillURL);
+          colorImg.attr("data-animated", animatedURL);
+          colorImg.attr("data-state", "still");
+          colorImg.attr("src", stillURL);
 
-            gifDiv.prepend(p);
-            gifDiv.prepend(colorImg);
+          gifDiv.prepend(p);
+          gifDiv.prepend(colorImg);
 
-            $("#gifs").prepend(gifDiv);
+          $("#gifs").prepend(gifDiv);
           }; //close for loop
       }); //close promise
     }); //close button click function
 
-    $(document).on('click', '.gif', function() {
-      var state = $(this).attr("data-state");
-      if (state === "still") {
-        $(this).attr("src", $(this).data("animated"));
-        $(this).attr("data-state", "animated");
-      } else {
-        $(this).attr("src", $(this).data("still"));
-        $(this).attr("data-state", "still");
-      }
-    });
-
-     function renderButtons() {
-      $('#buttons').empty()
-      $.each( topics, function( index, value ) {
-        $('#buttons').append(`<button data-color='${value}'>${value}!</button>`);
+      $(document).on('click', '.gif', function() {
+        var state = $(this).attr("data-state");
+        if (state === "still") {
+          $(this).attr("src", $(this).data("animated"));
+          $(this).attr("data-state", "animated");
+        } else {
+          $(this).attr("src", $(this).data("still"));
+          $(this).attr("data-state", "still");
+        }
       });
-    }
 
-    $("#add-color").on("click", function(event) {
-      event.preventDefault();
-      var input = $('#color-input').val();
-      topics.push(input);
-      renderButtons();
-    });
+      function renderButtons() {
+        $('#buttons').empty()
+        $.each( topics, function( index, value ) {
+          $('#buttons').append(`<button data-color='${value}'>${value}!</button>`);
+        });
+      }
 
-  </script>
-</body>
+      $("#add-color").on("click", function(event) {
+        event.preventDefault();
+        var input = $('#color-input').val();
+        topics.push(input);
+        renderButtons();
+      });
 
-</html>
+    </script>
+  </body>
+  </html>
